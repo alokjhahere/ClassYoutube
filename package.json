@@ -1,0 +1,29 @@
+{
+  "name": "classyoutube",
+  "version": "1.0.0",
+  "description": "React Project",
+  "source": "app.js",
+  "scripts": {
+    "start": "parcel index.html",
+    "build" : "parcel build index.html",
+    "test": "jest"
+
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alokjhahere/ClassYoutube.git"
+  },
+  "author": "Alok Jha",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/alokjhahere/ClassYoutube/issues"
+  },
+  "homepage": "https://github.com/alokjhahere/ClassYoutube#readme",
+  "devDependencies": {
+    "parcel": "^2.15.4"
+  },
+  "dependencies": {
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1"
+  }
+}
