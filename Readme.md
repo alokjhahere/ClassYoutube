@@ -1,4 +1,5 @@
-#Youtube-Project
+# YOUTUBE PROJECT
+# Folder Structure
 -Layout :
 -Header
 -Body
