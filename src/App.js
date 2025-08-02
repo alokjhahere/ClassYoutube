@@ -1,12 +1,17 @@
 import ReactDOM from "react-dom/client"
 import Header from "./components/Header";
 import Body from "./components/Body";
+import { Provider } from "react-redux";
+import store from "./utils/store"
 
 const App = () =>{
-return <div>
-    <Header/>
-    <Body/>
-</div>
+return( 
+    <Provider store={store}>
+       <div>
+          <Header/>
+          <Body/>
+       </div>
+</Provider>)
 }
 
 const root = ReactDOM.createRoot(document.getElementById("root"))
