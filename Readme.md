@@ -8,3 +8,7 @@
    -ButtonList
    -VideoContainer
     -VideoCard
+
+# features
+-Setup Redux Store
+-sideBar functioning using Redux

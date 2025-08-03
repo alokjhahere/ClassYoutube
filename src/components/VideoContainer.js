@@ -1,10 +1,23 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { YOUTUBE_VIDEOS_API } from '../utils/constants'
+import VideoCard from './VideoCard'
 
 const VideoContainer = () => {
+  const [videos, setVideos] = useState("");
+  useEffect(()=>{
+    getVideos()
+  },[])
+
+  const getVideos = async() => {
+      const data = await fetch(YOUTUBE_VIDEOS_API);
+      const json = await data.json()
+      setVideos(json.items)
+  }
+
   return (
-    <div>
-      <h1>Video Cards</h1>
-    </div>
+    
+      <VideoCard info={videos}/>
+    
   )
 }
 
