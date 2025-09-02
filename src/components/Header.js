@@ -1,9 +1,47 @@
-import React from 'react'
-import { useDispatch } from 'react-redux'
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { toggleMenu } from '../utils/appSlice';
+import { YOUTUBE_SEARCH_API } from '../utils/constants';
+import { cacheResults } from '../utils/searchSlice';
 
 const Header = () => {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [suggestions, setSuggestions] = useState([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+
+  const searchCache = useSelector((store)=>store.search)
   const dispatch = useDispatch();
+
+  useEffect(()=>{
+
+    const timer = setTimeout(()=>{
+      if(searchCache[searchQuery]){
+        setSuggestions(searchCache[searchQuery])
+      } else {
+        getSearchSuggestion()
+      }
+      }, 200);
+
+    return () => {
+      clearTimeout(timer);
+    };
+      
+  }, [searchQuery])
+
+  const getSearchSuggestion = async() => {
+      console.log("API call - " + searchQuery);
+      
+      const data = await fetch(YOUTUBE_SEARCH_API + searchQuery);
+      const json = await data.json();
+      setSuggestions(json[1]);
+
+      //update cache
+      dispatch(cacheResults({
+        [searchQuery] : json[1],
+      }))
+  }
+
+  
   const handleSideBar = () => {
      dispatch(toggleMenu())
   }
@@ -15,8 +53,21 @@ const Header = () => {
         <img className='h-11 mx-2' alt='logo' src='https://imgs.search.brave.com/0jMEbl-2WeSaQHRXZ2T0rRRxpr6bYa9d5QILr3u6B8M/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly8xMDAw/bG9nb3MubmV0L3dw/LWNvbnRlbnQvdXBs/b2Fkcy8yMDE3LzA1/L1lvdXR1YmUtTG9n/by01MDB4MjgxLnBu/Zw'/>
       </div>
       <div className='col-span-10 py-2 px-15'>
-        <input className='w-1/2 border border-gray-400 p-1 rounded-l-full' type='text'/>
+      <div className='col-span-10 py-2 px-15'>
+        <input className='w-1/2 border border-gray-400 p-1 rounded-l-full'
+         type='text' 
+         value={searchQuery} 
+         onChange={(e)=> setSearchQuery(e.target.value)}
+         onFocus={()=> setShowSuggestions(true)}
+         onBlur={()=> setShowSuggestions(false)}/>
+
         <button className= 'border border-gray-400 p-1 rounded-r-full pl-2 pr-3 bg-gray-300 '>Search</button>
+      </div>
+      <div className=' fixed bg-white mx-15  py-2 shadow-lg rounded-lg w-[30rem] border border-gray-100'>
+        <ul>
+          {showSuggestions && suggestions.map((item, index)=>(<li key={index} className='py-2 px-2 hover:bg-gray-100'>🔍{item}</li>))}
+        </ul>
+      </div>
       </div>
       <div className='col-span-1'>
         <img className='h-8' alt='user' src='https://imgs.search.brave.com/8DjRDrTQhcbFFYPeFEv0j2dowg90DgXJ7Xrh8daQVAY/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9tYXJr/ZXRwbGFjZS5jYW52/YS5jb20vRHo2M0Uv/TUFGNEtKRHo2M0Uv/MS90bC9jYW52YS11/c2VyLWljb24tTUFG/NEtKRHo2M0UucG5n'/>
